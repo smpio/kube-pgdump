@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set -ex
-PGDUMP_LABEL_SELECTOR="pgdump=true"
 
 function run_lftp {
     lftp -u ${FTP_LOGIN},${FTP_PASSWORD} -e "set ftp:ssl-allow no;${1}quit;" ${FTP_SERVER} ${@:2}
