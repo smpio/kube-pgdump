@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pgbackup
+
+spec:
+  serviceAccountName: backup-robot
+  restartPolicy: Never
+
+  containers:
+  - name: main
+    image: flaky/k8s-ftp-backup:5
+    imagePullPolicy: Always
+
+    env:
+    - name: PGDUMP_LABEL_SELECTOR
+      value: "pgdump=true"
+
+    - name: RATE_LIMIT
+      value: "60m"
+
+    - name: MAX_BACKUP_COUNT
+      value: "5"
+
+    - name: FTP_SERVER
+      value: ""
+    - name: FTP_LOGIN
+      value: ""
+    - name: FTP_PASSWORD
+      value: ""

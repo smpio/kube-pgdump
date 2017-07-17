@@ -1,11 +1,16 @@
-FROM python:3.6
+FROM debian:jessie-slim
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN apt-get update \
+    && apt-get install -y lftp curl
 
-COPY requirements.txt /usr/src/app/
-RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /usr/src/app/pgdump
+ENV KUBE_VERSION v1.6.4
 
-ENTRYPOINT ["python", "-m", "pgdump"]
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl
+RUN chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+
+COPY pgdump.sh /pgdump.sh
+
+RUN chmod +x /pgdump.sh
+
+CMD ["/pgdump.sh"]
