@@ -27,7 +27,7 @@ for pod_path in $(kubectl get pod -l "${PGDUMP_LABEL_SELECTOR}" --all-namespaces
         run_lftp "rm ${ftp_workdir}/${filename};";
      done
 
-     now=$(date -u +"%d.%m.%y-%k:%M")
+     now=$(date -u +"%d.%m.%y-%k:%M" | sed "s/ //g")
      dump_name="${now}.tar.gz"
 
      kubectl -n ${namespace} exec -ti ${pod_name} -- pg_dump --username=${pguser:=postgres} --dbname=${pgdb:=postgres} --format=t --clean \
